@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+
+import Search from './components/search/search.component';
+import CardList from './components/card-list/card-list.component';
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+	const [monsters, setMonsters] = useState([]);
+	const [searchQuery, setSearchQuery] = useState('');
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const data = await fetch('https://jsonplaceholder.typicode.com/users');
+			const monsters = await data.json();
+			setMonsters(monsters);
+		};
+
+		fetchData();
+	}, [])
+
+	const handleSearchQuery = (searchQuery) => {
+		setSearchQuery(searchQuery);
+	};
+
+	const filteredMonsters = monsters.filter(
+		monster => monster.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+	console.log(filteredMonsters);
+
+	return (
+		<div className="App">
+			<Search
+				placeholder="Search monsters"
+				value={ searchQuery }
+				handleChange={ handleSearchQuery }
+			/>
+			<CardList monsters={ filteredMonsters }/>
+		</div>
+	)
+};
 
 export default App;
