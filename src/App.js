@@ -30,6 +30,7 @@ const App = () => {
 
 	return (
 		<div className="App">
+			<h1>Monsters Rolodex</h1>
 			<Search
 				placeholder="Search monsters"
 				value={ searchQuery }
